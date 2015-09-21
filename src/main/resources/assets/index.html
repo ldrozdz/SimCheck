@@ -1,0 +1,82 @@
+<html>
+<head>
+    <title>SimCheck</title>
+    <style type="text/css">
+        fieldset {
+            display: inline;
+        }
+    </style>
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var cTable = null;
+            var wTable = null;
+            var kTable = null;
+            $('#sim-form').submit(function (event) {
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: 'api/process',
+                    data: $(this).serialize()
+                }).done(function (data, status, xhr) {
+                    $('#results').html(data);
+                    $.each(data, function (k, v) {
+                        $('#results').append(k + ': ' + v + '<br/>');
+                    });
+                });
+
+            });
+        });
+
+    </script>
+</head>
+<body>
+
+<div id="input">
+    <form id="sim-form" action="." method="POST">
+        <fieldset>
+            <legend>String 1</legend>
+            <textarea rows="24" cols="40" name="s1">A quick brown fox jumps over the lazy dog.</textarea>
+        </fieldset>
+        <fieldset>
+            <legend>String 2</legend>
+            <textarea rows="24" cols="40" name="s2">A lazy fox walks behind the quick brown dog.</textarea>
+        </fieldset>
+        <fieldset>
+            <legend>Tokeniser</legend>
+            <select name="tokeniser">
+                <option value="TokeniserCSVBasic">CSV tokeniser</option>
+                <option value="TokeniserQGram2">QGram-2 tokeniser</option>
+                <option value="TokeniserQGram2Extended">QGram-2 extended tokeniser</option>
+                <option value="TokeniserQGram3">QGram-3 tokeniser</option>
+                <option value="TokeniserQGram3Extended">QGram-3 extdended tokeniser</option>
+                <option value="TokeniserWhitespace" selected="selected">Whitespace tokeniser</option>
+            </select>
+        </fieldset>
+        <input type="submit"/>
+    </form>
+</div>
+<div id="output">
+    <div>
+        <table id="cTab" class="display">
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <table id="wTab" class="display">
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <table id="kTab" class="display">
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <pre id="results"></pre>
+</div>
+</div>
+</body>
+</html>
